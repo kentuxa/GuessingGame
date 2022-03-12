@@ -1,36 +1,32 @@
-const http = require("http");
+const express = require("express");
 const fs = require("fs");
-const { URL } = require("url");
 
 let secretNumber = Math.round(Math.random() * 100);
-function handlerequest(req, res) {
 
-    let parsedurl = new URL(req.url, "http://localhost");
+const app = express();
 
-    if (parsedurl.pathname == "/favicon.ico") {
-        res.end(fs.readFileSync("favicon (1).ico"));
-    }
-    else if (parsedurl.pathname == "/VerificareNumarulSecret") {
-        let number = parsedurl.searchParams.get("number");
-        if (secretNumber > number) {
-            res.end("too small");
-        }
-        else if (secretNumber < number) {
-            res.end("too big");
-        }
-        else if (secretNumber == number) {
-            res.end("gg!!");
-        }
-    }
-    else if (parsedurl.pathname == "/") {
-        res.end(fs.readFileSync("index.html"));
+app.get("/favicon.ico", (req, res) => {
+    res.end(fs.readFileSync("favicon (1).ico"));
+})
 
+app.get("/VerificareNumarulSecret", (req, res) => {
+    let number = req.query.number
+    if (secretNumber > number) {
+        res.end("too small");
     }
-    else {
-        res.end("Raspuns.");
+    else if (secretNumber < number) {
+        res.end("too big");
     }
-}
-let server = http.createServer(handlerequest);
-server.listen(2222, () => {
+    else if (secretNumber == number) {
+        res.end("gg!!");
+    }
+})
+
+app.get("/", (req, res) => {
+    res.end(fs.readFileSync("index.html"));
+})
+
+
+app.listen(2222, () => {
     console.log("Server is up.");
 })
