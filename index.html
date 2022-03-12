@@ -1,0 +1,19 @@
+<body>
+    <form onsubmit="VerifyNumber();returnfalse">
+        <input></input>
+        <button onclick="VerifyNumber()">Guess</button>
+        <p id="message"></p>
+    </form>
+    <script>
+        async function VerifyNumber() {
+            let number = document.getElementsByTagName("input")[0].value
+            let message = document.getElementById("message")
+            let response = await fetch(
+                "http://localhost:2222/VerificareNumarulSecret?number=" + number
+            );
+            let value = await response.text();
+            message.innerHTML = value;
+            // }
+        }
+    </script>
+</body>
